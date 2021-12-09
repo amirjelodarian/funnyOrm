@@ -156,8 +156,11 @@ class BaseDatabase {
                 return $allCols;
                 break;
             case 'sqlite':
-                $this->sql = "SELECT sql FROM sqlite_master WHERE tbl_name = {$resultTable} AND type = 'table'";
-                return $this->query()->fetchAll();
+                $this->sql = "pragma table_info('{$resultTable}');";
+                $allCols = [];
+                for ($i = 0;$i < count($this->query()->fetchAll());$i++)
+                    array_push($allCols,myTrim($this->query()->fetchAll()[$i]["name"]));
+                return $allCols;
                 break;
             default:
                 echo "go to App/Models/BaseModels/BaseDatabase.php func getTableColumns add your db structure show Columns";

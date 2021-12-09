@@ -1,11 +1,11 @@
 <?php
 
-
+use App\Models\Database2;
 use App\Models\User;
 require_once "./vendor/autoload.php";
 
 $user = new App\Models\User();
-
+$db2 = new Database2();
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,7 +20,21 @@ $user = new App\Models\User();
             <p>
                 
             <?php 
-                var_dump($user->find(27));
+                // var_dump($user->create([
+                //     "user_mode" => "standard",
+                //     "username" => "aslu",
+                //     "password" => "asli",
+                //     "tell" => '09303644573',
+                //     "email" => "asddli@gmail.com",
+                //     "address" => "asgar abad",
+                //     "first_name" => "aslu",
+                //     "last_name" => "sas",
+                //     "create_at" => strftime('%Y-%m-%d %H:%M:%S',time()),
+                //     "last_login" => strftime('%Y-%m-%d %H:%M:%S',time()),
+                //     "pro_pic" => "sa54d5.jpg",
+                //     "account_status" => "aslyy",
+                // ]));
+                var_dump($db2->find(4));
             ?>
             
             
