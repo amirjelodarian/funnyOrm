@@ -27,6 +27,7 @@ class Functions{
         return str_replace($find,$replace,$value);
     }
 
+
 }
 
 ?>

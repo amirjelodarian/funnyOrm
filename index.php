@@ -20,7 +20,7 @@ $user = new App\Models\User();
             <p>
                 
             <?php 
-                var_dump($user->find(1));
+                var_dump($user->find(27));
             ?>
             
             

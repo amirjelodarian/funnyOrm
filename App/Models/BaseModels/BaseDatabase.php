@@ -3,6 +3,7 @@
 namespace App\Models\BaseModels;
 require_once "./vendor/autoload.php";
 use function App\Utilities\errors;
+use function App\Utilities\escapeValue;
 
 use Exception;
 use \PDO;
@@ -192,24 +193,28 @@ class BaseDatabase {
         // this get find called class table name
         // $calledClassTableName = get_class_vars(get_called_class())['tableName']
         $tableName = $this->chooseTable($tableName);
+        $columns = $this->escapeValue($columns);
+        $tableName = $this->escapeValue($tableName);
+        $customSql = $this->escapeValue($customSql);
+
         $this->sql = "SELECT {$columns} FROM {$tableName} {$customSql}";
         return $this;
     }
 
     public function sql($sql){
-        $this->sql .= $sql;
+        $this->sql .= $this->escapeValue($sql);
         return $this;
     }
 
     // WHERE SQL
     public function where($column = '',$condition = '=',$value = ''){
         if($value == '' || empty($value) || !isset($value)){
-            $lastValue = $condition;
+            $lastValue = $this->escapeValue($condition);
             $lastCondition = '=';
             
         }else{
-            $lastValue = $value;
-            $lastCondition = $condition;
+            $lastValue = $this->escapeValue($value);
+            $lastCondition = $this->escapeValue($condition);
         }
         $this->sql .= " WHERE {$column} {$lastCondition} '{$lastValue}' ";
         return $this;
@@ -217,12 +222,15 @@ class BaseDatabase {
 
     // LIMIT SQL
     public function limit($count){
+        $count = $this->escapeValue($count);
         $this->sql .= " LIMIT {$count} ";
         return $this;
 
     }
 
     public function orderBy($column,$sortBy){
+        $column = $this->escapeValue($column);
+        $sortBy = $this->escapeValue($sortBy);
         $this->sql .= " ORDER BY {$column} {$sortBy} ";
         return $this;
     }
@@ -269,6 +277,28 @@ class BaseDatabase {
     }
 
 
+    public function create($values = [],$table = ''){
+        $table !== '' ? $tableName = $table : $tableName = $this->tableName;
+        $columns = [];
+        $allValues = [];
+        foreach($values as $column => $value){
+            array_push($columns,$column);
+
+            if (preg_match("/'/",$value))
+                $value = '"' . $this->escapeValue($value) . '"';
+            elseif (preg_match('/"/',$value))
+                $value = "'" . $this->escapeValue($value) . "'";
+            else
+                $value = '"' . $this->escapeValue($value) . '"';
+
+            array_push($allValues,$value);
+        }
+        $resultCols = implode(",",$columns);
+        $resultValues = implode(",",$allValues);   
+        $this->sql = "INSERT INTO {$tableName}({$resultCols})VALUES({$resultValues})";
+        return $this->query();
+    }
+
     // prepare and execute SQL
     public function query($sql = '')
     {
@@ -291,6 +321,23 @@ class BaseDatabase {
         return $this->query()->fetchAll();
     }
 
+    public function escapeValue($value,$giveInt = false){
+        if ($giveInt == true)
+            settype($value,'integer');
+        $magicQuotesActive = get_magic_quotes_gpc();
+        
+        // undo any magic quote effects so mysql_real_escape_string can do the work
+        if ($magicQuotesActive){
+            $value = stripslashes($value);
+        }
+       
+    
+        // if magic quotes aren't already on then add slashes manually
+        if (!$magicQuotesActive){
+            $value = addslashes($value);
+        }
+        return $value;
+    }
 
 }
 ?>

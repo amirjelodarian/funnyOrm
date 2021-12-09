@@ -4,6 +4,7 @@ namespace App\Utilities;
 use App\Utilities\Functions as UtilitiesFunctions;
 
 
+
 function errors($message,$sep = ''){
     echo UtilitiesFunctions::errors($message,$sep);
 }
