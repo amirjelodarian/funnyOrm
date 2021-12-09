@@ -1,0 +1,16 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        },
+        "classmap": [
+            "App/Models/BaseModels",
+            "App/Models",
+            "App/Utilities"
+        ],
+        "files": [
+            "App/helpers.php",
+            "App/DBConfig.php"
+        ]
+    }
+}
