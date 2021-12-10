@@ -32,8 +32,8 @@ use App\Models\User2;
                 //     "pro_pic" => "sa54d5.jpg",
                 //     "account_status" => "aslyy",
                 // ]));
-                var_dump($user->users());
-                var_dump($user2->all());
+                // var_dump($user->users());
+                var_dump($user2->where('username','amir')->get());
             ?>
             
             

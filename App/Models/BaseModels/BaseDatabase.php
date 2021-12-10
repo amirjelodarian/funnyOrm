@@ -215,7 +215,15 @@ class BaseDatabase {
             $lastValue = $this->escapeValue($value);
             $lastCondition = $this->escapeValue($condition);
         }
-        $this->sql .= " WHERE {$column} {$lastCondition} '{$lastValue}' ";
+        if(!(preg_match("/SELECT/",$this->sql))){
+            $this->select();
+        }
+        if(preg_match("/WHERE/",$this->sql)){
+            $this->sql .= " {$column} {$lastCondition} '{$lastValue}' ";
+        }else{
+            $this->sql .= " WHERE {$column} {$lastCondition} '{$lastValue}' ";
+        }
+        
         return $this;
     }
 
