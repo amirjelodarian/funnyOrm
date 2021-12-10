@@ -8,10 +8,14 @@ class ComposerStaticInit27f06f4ecd80050ff4ffd3f805e17987
 {
     public static $files = array (
         'd0dca54c1bcbed938a539389e43e6364' => __DIR__ . '/../..' . '/App/helpers.php',
-        '4e7ef311e44c536380e595e2f559ec67' => __DIR__ . '/../..' . '/App/DBConfig.php',
+        '70bce1f3a67e13eabbc6b9058609e23b' => __DIR__ . '/../..' . '/Config/AllDataBasesConfig.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'C' => 
+        array (
+            'Config\\' => 7,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -19,6 +23,10 @@ class ComposerStaticInit27f06f4ecd80050ff4ffd3f805e17987
     );
 
     public static $prefixDirsPsr4 = array (
+        'Config\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Config',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App',
@@ -27,12 +35,12 @@ class ComposerStaticInit27f06f4ecd80050ff4ffd3f805e17987
 
     public static $classMap = array (
         'App\\Models\\BaseModels\\BaseDatabase' => __DIR__ . '/../..' . '/App/Models/BaseModels/BaseDatabase.php',
-        'App\\Models\\BaseModels\\BaseModel' => __DIR__ . '/../..' . '/App/Models/BaseModels/BaseModel.php',
-        'App\\Models\\Database' => __DIR__ . '/../..' . '/App/Models/Database.php',
         'App\\Models\\Product' => __DIR__ . '/../..' . '/App/Models/Product.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/App/Models/User.php',
         'App\\Utilities\\Functions' => __DIR__ . '/../..' . '/App/Utilities/Functions.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Config\\Mysql\\MySqlDatabase' => __DIR__ . '/../..' . '/Config/Mysql/MySqlDatabase.php',
+        'Config\\Sqlite\\SqliteDatabase' => __DIR__ . '/../..' . '/Config/Sqlite/SqliteDatabase.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

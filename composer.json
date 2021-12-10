@@ -1,16 +1,20 @@
 {
     "autoload": {
         "psr-4": {
-            "App\\": "App/"
+            "App\\": "App/",
+            "Config\\": "Config/"
         },
         "classmap": [
+            "Config/Mysql",
+            "Config/Sqlite",
             "App/Models/BaseModels",
             "App/Models",
-            "App/Utilities"
+            "App/Utilities",
+            "Resources/views"
         ],
         "files": [
             "App/helpers.php",
-            "App/DBConfig.php"
+            "Config/AllDataBasesConfig.php"
         ]
     }
 }

@@ -1,11 +1,7 @@
 <?php
-
-use App\Models\Database2;
+require_once "../../vendor/autoload.php";
 use App\Models\User;
-require_once "./vendor/autoload.php";
-
-$user = new App\Models\User();
-$db2 = new Database2();
+use App\Models\User2;
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,6 +16,8 @@ $db2 = new Database2();
             <p>
                 
             <?php 
+            $user = new User();
+            $user2 = new User2();
                 // var_dump($user->create([
                 //     "user_mode" => "standard",
                 //     "username" => "aslu",
@@ -34,7 +32,8 @@ $db2 = new Database2();
                 //     "pro_pic" => "sa54d5.jpg",
                 //     "account_status" => "aslyy",
                 // ]));
-                var_dump($db2->find(4));
+                var_dump($user->users());
+                var_dump($user2->all());
             ?>
             
             

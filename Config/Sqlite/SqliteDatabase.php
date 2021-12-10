@@ -1,19 +1,16 @@
 <?php
-namespace App\Models;
-
-require_once "./vendor/autoload.php";
+namespace Config\Sqlite;
 use App\Models\BaseModels\BaseDatabase;
 
 
 
-class Database2 extends BaseDatabase {
+class SqliteDatabase extends BaseDatabase {
     
-    protected $table = 'users';
     // if you have any db change config vars
     private $config = [
-        'DB' => 'sqlite',
-        'DB_NAME' => 'App/Models/database.sqlite',
-        'DB_ERROR_MESSAGE' => true
+        'DB' => SQLITE_DB,
+        'DB_NAME' => SQLITE_DB_NAME,
+        'DB_ERROR_MESSAGE' => SQLITE_DB_ERROR_MESSAGE
     ];
 
     public function __construct()

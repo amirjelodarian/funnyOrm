@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'd0dca54c1bcbed938a539389e43e6364' => $baseDir . '/App/helpers.php',
-    '4e7ef311e44c536380e595e2f559ec67' => $baseDir . '/App/DBConfig.php',
+    '70bce1f3a67e13eabbc6b9058609e23b' => $baseDir . '/Config/AllDataBasesConfig.php',
 );

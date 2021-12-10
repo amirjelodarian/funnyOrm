@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\BaseModels;
-require_once "./vendor/autoload.php";
 use function App\Utilities\errors;
 use function App\Utilities\escapeValue;
 
@@ -32,23 +31,17 @@ class BaseDatabase {
         // check const database 
         // if null set manual model vars
         if (!empty($config)){
-            isset($config['DB']) ? $this->db = $config['DB'] : null;
-            isset($config['DB_HOST']) ? $this->host = $config['DB_HOST'] : null;
-            isset($config['DB_PORT']) ? $this->port = $config['DB_PORT'] : null ;
-            isset($config['DB_NAME']) ? $this->dbname = $config['DB_NAME'] : null;
-            isset($config['DB_CUSTOM_CONFIG']) ? $this->customDBConfig = $config['DB_CUSTOM_CONFIG'] : null;
-            isset($config['DB_USERNAME']) ? $this->username = $config['DB_USERNAME'] : null;
-            isset($config['DB_PASSWORD']) ? $this->password = $config['DB_PASSWORD'] : null;
-            isset($config['DB_ERROR_MESSAGE']) ? $this->errorMessage = $config['DB_ERROR_MESSAGE'] : null;
+            (isset($config['DB']) && !empty($config['DB'])) ? $this->db = $config['DB'] : null;
+            (isset($config['DB_HOST']) && !empty($config['DB_HOST'])) ? $this->host = $config['DB_HOST'] : null;
+            (isset($config['DB_PORT']) && !empty($config['DB_PORT'])) ? $this->port = $config['DB_PORT'] : null ;
+            (isset($config['DB_NAME']) && !empty($config['DB_NAME'])) ? $this->dbname = $config['DB_NAME'] : null;
+            (isset($config['DB_CUSTOM_CONFIG']) && !empty($config['DB_CUSTOM_CONFIG'])) ? $this->customDBConfig = $config['DB_CUSTOM_CONFIG'] : null;
+            (isset($config['DB_USERNAME']) && !empty($config['DB_USERNAME'])) ? $this->username = $config['DB_USERNAME'] : null;
+            (isset($config['DB_PASSWORD']) && !empty($config['DB_PASSWORD'])) ? $this->password = $config['DB_PASSWORD'] : null;
+            (isset($config['DB_ERROR_MESSAGE']) && !empty($config['DB_ERROR_MESSAGE'])) ? $this->errorMessage = $config['DB_ERROR_MESSAGE'] : null;
         }else{
-            DB !== '' ? $this->db = DB : null;
-            DB_HOST !== '' ? $this->host =  DB_HOST : null;
-            DB_PORT !== '' ? $this->port = DB_PORT : null;
-            DB_NAME !== '' ? $this->dbname = DB_NAME : null;
-            DB_CUSTOM_CONFIG !== '' ? $this->customDBConfig = DB_CUSTOM_CONFIG : null;
-            DB_USERNAME !== '' ? $this->username = DB_USERNAME : null;
-            DB_PASSWORD !== '' ? $this->password = DB_PASSWORD : null;
-            DB_ERROR_MESSAGE !== '' ? $this->errorMessage = DB_ERROR_MESSAGE : null;
+            echo "Database config file have error !";
+            die();
         }
         // open connection
         $this->openConnection();
@@ -72,10 +65,13 @@ class BaseDatabase {
     protected function openConnection(){
         $this->connectionStatus = true;
         try{
-            if(isset($this->username) && $this->username !== '' && isset($this->password) && $this->password !== '')
+            if(isset($this->username) && $this->username !== '' && !(isset($this->password)) || $this->password == '')
+                $this->connection = new PDO($this->setDBAttr(),$this->username);
+            elseif(isset($this->username) && $this->username !== '' && isset($this->password) && $this->password !== '')
                 $this->connection = new PDO($this->setDBAttr(),$this->username,$this->password);
             else
                 $this->connection = new PDO($this->setDBAttr());
+                
             if($this->errorMessage == true)
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE , PDO::ERRMODE_EXCEPTION);
           
@@ -278,7 +274,9 @@ class BaseDatabase {
         else
             return $this->select()->get();
     }
-
+    public function all($limit = ''){
+        return $this->findAll($limit);
+    }
 
     public function create($values = [],$table = ''){
         $table !== '' ? $tableName = $table : $tableName = $this->tableName;
@@ -299,7 +297,7 @@ class BaseDatabase {
         $resultCols = implode(",",$columns);
         $resultValues = implode(",",$allValues);   
         $this->sql = "INSERT INTO {$tableName}({$resultCols})VALUES({$resultValues})";
-        return $this->query();
+        $this->query();
     }
 
     // prepare and execute SQL

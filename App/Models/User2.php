@@ -1,9 +1,8 @@
 <?php
 namespace App\Models;
-use Config\Mysql\MySqlDatabase;
+use Config\Sqlite\SqliteDatabase;
 
-
-class User extends MySqlDatabase{
+class User2 extends SqliteDatabase{
 
 
     protected $table = "users";
@@ -15,4 +14,3 @@ class User extends MySqlDatabase{
         
     }
 }
-$user = new User();
