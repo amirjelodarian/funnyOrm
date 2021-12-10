@@ -9,8 +9,17 @@ class UserController extends User2{
         View::view('myTest',["users" => $user->all()]);
     }
     public function submit(){
-        
-        echo $_POST["username"];
+        $user = new User2();
+        if(
+            $user->update(["username" => $_POST["username"]])
+            ->where('username',$_POST["allUsername"])
+            ->get() !== false
+        )
+        {
+            echo "updated ;) ";
+        }else{
+            echo "some error !";
+        }
     }
 }
 ?>

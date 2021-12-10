@@ -10,7 +10,7 @@
     <h1>My Form</h1>
     <form method="POST" action="b">
         <input name="username"  /><br />
-        <select>
+        <select name="allUsername">
         <?php foreach($users as $user) : ?>
             <option style="font-size: 20px;"><?= $user["username"] ?></option>
         <?php endforeach; ?>

@@ -208,24 +208,31 @@ class BaseDatabase {
     // WHERE SQL
     public function where($column = '',$condition = '=',$value = ''){
         if($value == '' || empty($value) || !isset($value)){
-            $lastValue = $this->escapeValue($condition);
+            $lastValue = $condition;
             $lastCondition = '=';
             
         }else{
-            $lastValue = $this->escapeValue($value);
+            $lastValue = $value;
             $lastCondition = $this->escapeValue($condition);
         }
         // check to see used select or not
         // if select dont use select , this will auto select
-        if(!(preg_match("/SELECT/",$this->sql))){
+        if(!(preg_match("/SELECT/",$this->sql)) && !(preg_match("/UPDATE/",$this->sql))){
             $this->select();
         }
         
+        if (preg_match("/'/",$lastValue))
+            $lastValue = '"' . $lastValue . '"';
+        elseif (preg_match('/"/',$lastValue))
+            $lastValue = "'" . $$lastValue . "'";
+        else
+            $lastValue = '"' . $lastValue . '"';
+
         // check to see before use where or not , if used then clear const WHERE to not duplicate
         if(preg_match("/WHERE/",$this->sql)){
-            $this->sql .= " {$column} {$lastCondition} '{$lastValue}' ";
+            $this->sql .= " {$column} {$lastCondition} {$lastValue} ";
         }else{
-            $this->sql .= " WHERE {$column} {$lastCondition} '{$lastValue}' ";
+            $this->sql .= " WHERE {$column} {$lastCondition} {$lastValue} ";
         }
         
         return $this;
@@ -290,6 +297,7 @@ class BaseDatabase {
         return $this->findAll($limit);
     }
 
+    // insert SQL
     public function create($values = [],$table = ''){
         $table !== '' ? $tableName = $table : $tableName = $this->tableName;
         $columns = [];
@@ -312,6 +320,37 @@ class BaseDatabase {
         $this->query();
     }
 
+    public function update($values = [],$table = ''){
+        $table !== '' ? $tableName = $table : $tableName = $this->tableName;
+        $setSql = '';
+    
+        foreach ($values as $Column => $Value) {
+            if(count($values) > 1){
+                if (preg_match("/'/",$Value))
+                    $Value = '"' . $this->escapeValue($Value) . '"';
+                elseif (preg_match('/"/',$Value))
+                    $Value = "'" . $this->escapeValue($Value) . "'";
+                else
+                    $Value = '"' . $this->escapeValue($Value) . '"';
+                $setSql .= "{$Column}={$Value},";
+            }
+            else{
+                if (preg_match("/'/",$Value))
+                    $Value = '"' . $this->escapeValue($Value) . '"';
+                elseif (preg_match('/"/',$Value))
+                    $Value = "'" . $this->escapeValue($$Value) . "'";
+                else
+                    $Value = '"' . $this->escapeValue($Value) . '"';
+                $setSql = "{$Column}={$Value}";
+            }
+                
+        }
+    
+        $this->sql = "UPDATE {$tableName} SET {$setSql} ";
+        return $this;
+    }
+
+
     // prepare and execute SQL
     public function query($sql = '')
     {
@@ -319,7 +358,7 @@ class BaseDatabase {
             $resultSql = $sql;
         else
             $resultSql = $this->sql;
-
+        
         $query = $this->connection->prepare($resultSql);
         $query->execute();
         return $query;
@@ -331,7 +370,12 @@ class BaseDatabase {
     {
         if (isset($count) && !empty($count))
             $this->limit($count);
-        return $this->query()->fetchAll();
+        try{
+            return $this->query()->fetchAll();
+        }catch(Exception $e){
+            return false;
+        }
+        
     }
 
     public function escapeValue($value,$giveInt = false){
