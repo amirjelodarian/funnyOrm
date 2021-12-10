@@ -1,5 +1,8 @@
 <?php 
 namespace App\Utilities;
+
+use App\Models\BaseModels\View;
+
 class Functions{
 
     public static $errorsSet;
@@ -27,7 +30,9 @@ class Functions{
         return str_replace($find,$replace,$value);
     }
 
-
+    public function view($path,$data = []){
+        return View::view($path,$data);
+    }
 }
 
 ?>

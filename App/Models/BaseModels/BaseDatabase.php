@@ -215,9 +215,13 @@ class BaseDatabase {
             $lastValue = $this->escapeValue($value);
             $lastCondition = $this->escapeValue($condition);
         }
+        // check to see used select or not
+        // if select dont use select , this will auto select
         if(!(preg_match("/SELECT/",$this->sql))){
             $this->select();
         }
+        
+        // check to see before use where or not , if used then clear const WHERE to not duplicate
         if(preg_match("/WHERE/",$this->sql)){
             $this->sql .= " {$column} {$lastCondition} '{$lastValue}' ";
         }else{

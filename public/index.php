@@ -1,23 +1,9 @@
 <?php
-require_once "../../vendor/autoload.php";
-use App\Models\User;
-use App\Models\User2;
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-            <p>
-                
-            <?php 
-            $user = new User();
-            $user2 = new User2();
+require_once "../vendor/autoload.php";
+use App\Models\BaseModels\Route;
+$route = new Route();
+
+       
                 // var_dump($user->create([
                 //     "user_mode" => "standard",
                 //     "username" => "aslu",
@@ -33,11 +19,7 @@ use App\Models\User2;
                 //     "account_status" => "aslyy",
                 // ]));
                 // var_dump($user->users());
-                var_dump($user2->where('username','amir')->get());
+                // var_dump($user2->where('username','amir')->where('AND id',10)->get());
+                $route->get('a',"UserController@index");
+                $route->post('b',"UserController@submit");
             ?>
-            
-            
-            </p>
-
-</body>
-</html>
