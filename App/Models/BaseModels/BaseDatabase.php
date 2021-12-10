@@ -11,7 +11,7 @@ use function App\Utilities\myTrim;
 
 
 class BaseDatabase {
-    private $db;
+    public $db;
     private $host;
     private $dbname;
     private $username;
