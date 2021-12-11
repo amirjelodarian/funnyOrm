@@ -38,5 +38,7 @@ class UserController {
             echo $user->getMessages;
         }
     }
+
+  
 }
 ?>

@@ -8,18 +8,10 @@ class Route{
         
         switch($_SERVER['REQUEST_METHOD']){
             case "GET":
-                foreach($this->getRouteDo[0] as $route => $do){
-                    if($this->getUrl() == $route){
-                         $this->checkDoStringOrFunction($do);
-                     }
-                 }
+                $this->handleUrl($this->getRouteDo);
             break;
             case "POST":
-                foreach($this->postRouteDo[0] as $route => $do){
-                    if($this->getUrl() == $route){
-                         $this->checkDoStringOrFunction($do);
-                     }
-                 }
+                $this->handleUrl($this->postRouteDo);
             break;
             default:
                 echo "bad method";
@@ -32,7 +24,19 @@ class Route{
         
         
     }
+    private function handleUrl($values = []){
+        foreach($values as $routeDo){
+            foreach($routeDo as $route => $do){
+                if($this->getUrl() == $route){
+                    $this->checkDoStringOrFunction($do);
+                }
+            }
+         }
+    }
     private function getUrl(){
+        // can see user url entered
+        // /project/public/hello world
+        // hello world returned
         $url = $_SERVER["SCRIPT_NAME"];
         $lastUrl = str_replace('index.php','',$url);
         return str_replace($lastUrl,'',$_SERVER["REQUEST_URI"]);
