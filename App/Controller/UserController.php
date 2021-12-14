@@ -26,8 +26,8 @@ class UserController {
                 // ]));
                 // var_dump($user->users());
                 // var_dump($user2->where('username','amir')->where('AND id',10)->get());
+                view('myTest',["users" => $user->find($request['id']),"DB" => $user->db]);
         
-        view('myTest',["users" => $user->all(),"DB" => $user->db]);
     }
     public function submit(){
         $user = new User2();

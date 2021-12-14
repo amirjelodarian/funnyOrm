@@ -127,7 +127,7 @@ class Route{
                 return call_user_func("{$class}::{$method}",$this->request);    
                 break;
             case "object":
-                return $do();
+                return $do($this->request);
                 break;
         } 
 
