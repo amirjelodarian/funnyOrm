@@ -4,8 +4,10 @@ use App\Models\BaseModels\View;
 use App\Models\User2;
 use App\Models\User;
 use function App\Utilities\view;
+
 class UserController {
     public function index(){
+        $user = new User();
            // var_dump($user->create([
                 //     "user_mode" => "standard",
                 //     "username" => "aslu",
@@ -22,7 +24,7 @@ class UserController {
                 // ]));
                 // var_dump($user->users());
                 // var_dump($user2->where('username','amir')->where('AND id',10)->get());
-        $user = new User2();
+        
         view('myTest',["users" => $user->all(),"DB" => $user->db]);
     }
     public function submit(){
