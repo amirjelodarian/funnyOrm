@@ -1,13 +1,15 @@
 <?php
 
+use App\Models\BaseModels\Route;
 use App\Models\BaseModels\View;
 use App\Models\User2;
 use App\Models\User;
 use function App\Utilities\view;
 
 class UserController {
-    public function index(){
+    public function index($request){
         $user = new User();
+        
            // var_dump($user->create([
                 //     "user_mode" => "standard",
                 //     "username" => "aslu",

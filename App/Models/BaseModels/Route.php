@@ -36,21 +36,17 @@ class Route{
                 // this can fill request attr user entered in url and router
                 switch($method){
                     case "GET":
-                        
                         // convert to array ,
                         // entered url in router ,
                         // current url
                         $dividRoute = explode('/',$route);
                         $dividCurrentUrl = explode('/',$this->getUrl());
                         //////////////////////////
-
                         // check , if size not equal mean to bad url 
                         // and not match with together
                         if(count($dividRoute) == count($dividCurrentUrl)){
-
                             // this can fill $this->request by key => value
                             $this->fillQueryString($route);
-
                             // delete {} bracets values and just keep real url
                             // for example
                             // user/{userid}/book/{bookid}
@@ -59,22 +55,14 @@ class Route{
                                 $index = array_search($routeWithBracet,$dividRoute);
                                 unset($dividRoute[$index]);
                             }
-
-                            
-                            
                             // check if $dividRoute belong to current client url
                             $status = array_intersect($dividRoute,$dividCurrentUrl);
                             if(count($status) == count($dividRoute))
                                 $this->checkDoStringOrFunction($do);    
                             else
                                 echo "Bad Routing ! Not Equal Url With Entered Url In Router !";
-                            
                         }else
-                            echo "You Increased Or Decrease Routing Args!";
-                        
-                        
-                        
-                        
+                            echo "You Increased Or Decrease Routing Args!";        
                         break;
                     case "POST":
                         if($this->getUrl() == $route)
@@ -91,15 +79,11 @@ class Route{
     private function fillQueryString($routerUrl){
         $dividRoute = explode('/',$routerUrl);
         $dividCurrentUrl = explode('/',$this->getUrl());
-        for($i = 0; $i < count($dividCurrentUrl); $i++){
-            
+        for($i = 0; $i < count($dividCurrentUrl); $i++)
             if($dividCurrentUrl[$i] !== $dividRoute[$i])
-                
                 $this->request[$this->findGivenUrlName($dividRoute[$i])] = $dividCurrentUrl[$i]; 
-                
-            
-        }
         
+        return $this;        
     }
     private function findGivenUrlName($url ,$start='{', $end='}'){
         $arr = "";
@@ -140,7 +124,7 @@ class Route{
                 $classAndMethod = explode("@",$do);
                 $class = $classAndMethod[0];
                 $method = $classAndMethod[1];
-                return call_user_func("{$class}::{$method}");    
+                return call_user_func("{$class}::{$method}",$this->request);    
                 break;
             case "object":
                 return $do();
