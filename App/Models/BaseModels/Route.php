@@ -3,10 +3,11 @@ namespace App\Models\BaseModels;
 
 use Exception;
 
+use function App\Utilities\view;
 
 class Route{
     public static $getRouteDo = [];
-    public  static $postRouteDo = [];
+    public static $postRouteDo = [];
     public $request = [];
     public static $url;
     public static $home;
@@ -16,7 +17,7 @@ class Route{
         self::$url = self::url() . '/';
         self::$home = self::url('home');
     }
-    
+
     public function __destruct()
     {
         switch($_SERVER['REQUEST_METHOD']){
@@ -82,7 +83,7 @@ class Route{
             ////////////////////////////////////////////////////
                  
         }else
-            echo "Error 404 ! Not Found<br />";
+            echo "Eror 404 ! Not Found <br />";
             // echo "You Increased Or Decrease Routing Args!"; 
     }
 
