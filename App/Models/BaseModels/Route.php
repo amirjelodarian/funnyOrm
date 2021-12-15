@@ -8,6 +8,11 @@ class Route{
     public  $getRouteDo = [];
     public  $postRouteDo = [];
     public $request = [];
+    public static $url;
+    public function __construct()
+    {
+        self::$url = $this->url();
+    }
     public function __destruct()
     {
         
@@ -46,7 +51,7 @@ class Route{
                         // and not match with together
                         if(count($dividRoute) == count($dividCurrentUrl)){
                             // this can fill $this->request by key => value
-                            $this->fillQueryString($route);
+                            $this->fillQueryString($route,'GET');
                             // delete {} bracets values and just keep real url
                             // for example
                             // user/{userid}/book/{bookid}
@@ -62,11 +67,36 @@ class Route{
                             else
                                 echo "Bad Routing ! Not Equal Url With Entered Url In Router !";
                         }else
-                            echo "You Increased Or Decrease Routing Args!";        
+                            echo "Error 404 ! Not Found";
+                            // echo "You Increased Or Decrease Routing Args!";        
                         break;
                     case "POST":
-                        if($this->getUrl() == $route)
-                            $this->checkDoStringOrFunction($do);
+                         // convert to array ,
+                        // entered url in router ,
+                        // current url
+                        $dividRoute = explode('/',$route);
+                        $dividCurrentUrl = explode('/',$this->getUrl());
+                        //////////////////////////
+                        // check , if size not equal mean to bad url 
+                        // and not match with together
+                            // this can fill $this->request by key => value
+                            $this->fillQueryString($route,'POST');
+                            
+                            // delete {} bracets values and just keep real url
+                            // for example
+                            // user/{userid}/book/{bookid}
+                            // just keep user , book
+                            foreach($this->findGivenUrlNameArray($route) as $routeWithBracet){
+                                $index = array_search($routeWithBracet,$dividRoute);
+                                unset($dividRoute[$index]);
+                            }
+                            // check if $dividRoute belong to current client url
+                            $status = array_intersect($dividRoute,$dividCurrentUrl);
+                            if(count($status) == count($dividRoute))
+                                $this->checkDoStringOrFunction($do);    
+                            else
+                                echo "Bad Routing ! Not Equal Url With Entered Url In Router !";
+                            // echo "You Increased Or Decrease Routing Args!"; 
                         break;
                     default:
                         echo "Handle Url Error In Router!";
@@ -76,12 +106,19 @@ class Route{
             }
          }
     }
-    private function fillQueryString($routerUrl){
+    private function fillQueryString($routerUrl,$method){
         $dividRoute = explode('/',$routerUrl);
         $dividCurrentUrl = explode('/',$this->getUrl());
         for($i = 0; $i < count($dividCurrentUrl); $i++)
             if($dividCurrentUrl[$i] !== $dividRoute[$i])
                 $this->request[$this->findGivenUrlName($dividRoute[$i])] = $dividCurrentUrl[$i]; 
+            
+
+
+
+        if($method == 'POST')
+            foreach($_POST as $variable => $value)
+                $this->request[$variable] = $value; 
         
         return $this;        
     }
@@ -116,6 +153,11 @@ class Route{
         $url = $_SERVER["SCRIPT_NAME"];
         $lastUrl = str_replace('index.php','',$url);
         return str_replace($lastUrl,'',$_SERVER["REQUEST_URI"]);
+    }
+
+    public function url(){
+        $mainRoute = str_replace('index.php','',$_SERVER["SCRIPT_NAME"]); 
+        return  $mainRoute . $this->getUrl();
     }
 
     private function checkDoStringOrFunction($do){

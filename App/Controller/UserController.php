@@ -8,7 +8,7 @@ use function App\Utilities\view;
 
 class UserController {
     public function index($request){
-        $user = new User();
+        $user = new User2();
         
            // var_dump($user->create([
                 //     "user_mode" => "standard",
@@ -26,21 +26,24 @@ class UserController {
                 // ]));
                 // var_dump($user->users());
                 // var_dump($user2->where('username','amir')->where('AND id',10)->get());
-                view('myTest',["users" => $user->find($request['id']),"DB" => $user->db]);
+                view('myTest',["users" => $user->all(),"DB" => $user->db]);
         
     }
-    public function submit(){
-        $user = new User2();
-        if(
-            $user->update(["username" => $_POST["username"]])
-            ->where('username',$_POST["allUsername"])
-            ->get() !== false
-        )
-        {
-            echo "updated ;) ";
-        }else{
-            echo $user->getMessages;
+    public function submit($request){
+        foreach($request as $key => $val){
+            echo "$key => $val <br />";
         }
+        // $user = new User2();
+        // if(
+        //     $user->update(["username" => $request["username"]])
+        //     ->where('username',$request["allUsername"])
+        //     ->get() !== false
+        // )
+        // {
+        //     echo "updated ;) ";
+        // }else{
+        //     echo $user->getMessages;
+        // }
     }
 
   

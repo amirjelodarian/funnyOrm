@@ -13,6 +13,7 @@ $route = new Route();
 <?php 
 // $user = new User2();
 $route->get('user/{id}/comment/{comment}','UserController@index');
+$route->post('user/{id}/comment/{comment}','UserController@submit');
 // $route->post('b',"UserController@submit");
 
 // $route->get('createuser',function(){

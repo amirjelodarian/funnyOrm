@@ -1,3 +1,7 @@
+<?php
+
+use App\Models\BaseModels\Route;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +21,7 @@
 <body>
     <h1>My Form</h1>
     <?= $DB ?>
-    <form method="POST" action="b">
+    <form method="POST">
         <input name="username"  /><br />
         <select name="allUsername">
         <?php foreach($users as $user) : ?>
