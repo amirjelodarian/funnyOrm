@@ -46,6 +46,25 @@ class UserController {
         // }
     }
 
+
+    public function index2($request){
+        $user = new User2();
+        view('myTest',["users" => $user->all(),"DB" => $user->db]);
+    }
+
+    public function submit2($request){
+          $user = new User2();
+        if(
+            $user->update(["username" => $request["username"]])
+            ->where('username',$request["allUsername"])
+            ->get() !== false
+        )
+        {
+            echo "updated ;) ";
+        }else{
+            echo $user->getMessages;
+        }
+    }
   
 }
 ?>

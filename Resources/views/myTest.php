@@ -21,7 +21,7 @@ use App\Models\BaseModels\Route;
 <body>
     <h1>My Form</h1>
     <?= $DB ?>
-    <form method="POST">
+    <form method="POST" action="<?= Route::$url ?>b">
         <input name="username"  /><br />
         <select name="allUsername">
         <?php foreach($users as $user) : ?>
