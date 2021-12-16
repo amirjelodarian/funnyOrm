@@ -217,7 +217,7 @@ class BaseDatabase {
         }
         // check to see used select or not
         // if select dont use select , this will auto select
-        if(!(preg_match("/SELECT/",$this->sql)) && !(preg_match("/UPDATE/",$this->sql))){
+        if(!(preg_match("/SELECT/",$this->sql)) && !(preg_match("/UPDATE/",$this->sql))  && !(preg_match("/DELETE/",$this->sql))){
             $this->select();
         }
         
@@ -317,7 +317,7 @@ class BaseDatabase {
         $resultCols = implode(",",$columns);
         $resultValues = implode(",",$allValues);   
         $this->sql = "INSERT INTO {$tableName}({$resultCols})VALUES({$resultValues})";
-        $this->query();
+        $this->exec();
     }
 
     public function update($values = [],$table = ''){
@@ -350,6 +350,12 @@ class BaseDatabase {
         return $this;
     }
 
+    public function delete($table = '',$customSql = ''){
+        $table !== '' ? $tableName = $table : $tableName = $this->tableName;
+        $customSql !== '' ? $this->escapeValue($customSql) : false;
+        $this->sql = "DELETE FROM {$tableName} {$customSql}";
+        return $this;
+    }
 
     // prepare and execute SQL
     public function query($sql = '')
@@ -364,6 +370,20 @@ class BaseDatabase {
         return $query;
     }
 
+    public function exec($sql = ''){
+        if (isset($sql) && !empty($sql))
+            $resultSql = $sql;
+        else
+            $resultSql = $this->sql;
+    
+        return $this->connection->exec($resultSql);
+        
+    }
+
+    
+    public function do($sql = ''){
+        return $this->exec($sql);    
+    }
 
     // fetchAll SQL
     public function get($count = '')

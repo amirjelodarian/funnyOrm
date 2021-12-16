@@ -8,7 +8,7 @@ use function App\Utilities\view;
 
 class UserController {
     public function index($request){
-        $user = new User2();
+        $user = new User();
         
            // var_dump($user->create([
                 //     "user_mode" => "standard",
@@ -33,17 +33,11 @@ class UserController {
         foreach($request as $key => $val){
             echo "$key => $val <br />";
         }
-        // $user = new User2();
-        // if(
-        //     $user->update(["username" => $request["username"]])
-        //     ->where('username',$request["allUsername"])
-        //     ->get() !== false
-        // )
-        // {
-        //     echo "updated ;) ";
-        // }else{
-        //     echo $user->getMessages;
-        // }
+        $user = new User();
+        
+           $user->delete()->where('username','aslu')->do();
+           var_dump($user->sql);
+        
     }
 
 
@@ -57,7 +51,7 @@ class UserController {
         if(
             $user->update(["username" => $request["username"]])
             ->where('username',$request["allUsername"])
-            ->get() !== false
+            ->do() !== false
         )
         {
             echo "updated ;) ";
